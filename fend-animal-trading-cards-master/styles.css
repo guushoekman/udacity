@@ -1,0 +1,23 @@
+.card {
+  border: 1px solid #ccc;
+  width: 300px;
+  padding: 10px;
+}
+
+.information {
+  margin-top: 10px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+}
+
+img {
+  width: 300px;
+}
+
+.fact {
+  font-style: italic;
+}
+
+.label {
+  font-weight: bold;
+}
