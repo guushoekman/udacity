@@ -21,3 +21,7 @@ img {
 .label {
   font-weight: bold;
 }
+
+li {
+  list-style-type: none;
+}
