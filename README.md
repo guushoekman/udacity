@@ -1,3 +1,3 @@
-# Pixel Art Maker Project
+# Udacity projects
 
-For Udacity Front-End Web Developer Nanodegree Program
+For the Front-End Web Developer Nanodegree Program
