@@ -12,20 +12,19 @@ function makeGrid(width, height) {
     grid += "</tr>";
   }
   pixelCanvas.html(grid);
-  pixelCanvas.css("background-color", "#ffffff");
 };
 
 $(document).ready(function(){
-  $("#submit").click(function(evt) {
+  $("#submit").click(function(event) {
     var height, width;
     width = $("#input_width").val();
     height = $("#input_height").val();
-    evt.preventDefault();
+    event.preventDefault();
     makeGrid(width, height);
   });
 
-  $("#pixel_canvas").click(function(evt) {
+  $("#pixel_canvas").click(function(event) {
     var color = $("#colorPicker").val();
-    $(evt.target).css("background-color", color);
+    $(event.target).css("background-color", color);
   });
 });
