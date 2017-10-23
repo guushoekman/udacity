@@ -1,23 +1,31 @@
-function makeGrid() {
-  var table = document.getElementById("pixel_canvas");
-  table.innerHTML = "";
-  while(table.rows.length > 0)
-    table.deleteRow(0);
-  var input_rows = $("#input_height").val();
-  var input_cols = $("#input_width").val();
-  for (var i = 0; i < input_rows; i++) {
-    var row_elem = table.insertRow(i);
-    row_elem.setAttribute("class", "row");
-    for (var j = 0; j < input_cols; j++) {
-      var cell= row_elem.insertCell(j);
-      cell.addEventListener('click', function(evt) {
-        evt.target.style.backgroundColor = document.getElementById("colorPicker").value;
-      });
-    }
+function makeGrid(width, height) {
+  var pixelCanvas, grid;
+  pixelCanvas = $("#pixel_canvas");
+  if (pixelCanvas.children().length) {
+    pixelCanvas.empty();
   }
-  return false;
-}
+  for(var i = 0; i < height; i++) {
+    grid += "<tr>";
+    for (var j = 0; j < width; j++) {
+      grid += "<td></td>";
+    }
+    grid += "</tr>";
+  }
+  pixelCanvas.html(grid);
+  pixelCanvas.css("background-color", "#ffffff");
+};
 
-$("td").click(function() {
-  $(this).css("background-color", $("#colorPicker").val());
+$(document).ready(function(){
+  $("#submit").click(function(evt) {
+    var height, width;
+    width = $("#input_width").val();
+    height = $("#input_height").val();
+    evt.preventDefault();
+    makeGrid(width, height);
+  });
+
+  $("#pixel_canvas").click(function(evt) {
+    var color = $("#colorPicker").val();
+    $(evt.target).css("background-color", color);
+  });
 });
