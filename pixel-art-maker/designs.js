@@ -26,7 +26,7 @@ $(document).ready(function(){
   });
 
   // changes the colour of a square to the colour the user has selected
-  $("#pixel_canvas td").click(function(event) {
+  $("#pixel_canvas").on("click", "td", function(event) {
     var color = $("#colorPicker").val();
     $(event.target).css("background-color", color);
   });
