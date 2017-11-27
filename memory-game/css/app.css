@@ -94,9 +94,15 @@ h1 {
 
 #score-panel {
   text-align: left;
-  width: 345px;
+  width: 645px;
   margin-bottom: 10px;
 }
+
+#score-panel .stopwatch {
+    text-align: center;
+    margin-left: 25%;
+}
+
 #score-panel .stars {
   margin: 0;
   padding: 0;
@@ -111,6 +117,7 @@ h1 {
   float: right;
   cursor: pointer;
 }
+
 
 *::-moz-selection {
   background: transparent;

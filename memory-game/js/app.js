@@ -1,3 +1,27 @@
+let seconds = 0, minutes = 0,
+    t;
+
+function add() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+
+    $(".time").text((minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds));
+
+    timer();
+}
+function timer() {
+    t = setTimeout(add, 1000);
+}
+
+timer();
+
 let symbols = ["bicycle", "bicycle", "leaf", "leaf", "cube", "cube", "anchor", "anchor", "paper-plane-o", "paper-plane-o", "bolt", "bolt", "bomb", "bomb", "diamond", "diamond"],
     opened = [],
     match = 0,
@@ -39,6 +63,9 @@ function initGame() {
     $deck.append($("<li class='card'><i class='fa fa-" + cards[i] + "'></i></li>"))
   }
   addCardListener();
+  $(".time").text("00:00");
+  seconds = 0;
+  minutes = 0;;
 };
 
 // Set Rating and final Score
@@ -59,12 +86,12 @@ function setRating(moves) {
 
 // End Game
 function endGame(moves, score) {
-  swal({
+    swal({
     // swal function usage: https://sweetalert.js.org/docs/
     allowEscapeKey: false,
     allowOutsideClick: false,
     title: "Congratulations! You Won!",
-    text: "With " + moves + " Moves and " + score + " Stars.\n Woooooo!",
+    text: "It took you " + moves + " moves and " + $(".time").text() + ". You scored " + score + " stars!",
     type: "success",
     confirmButtonColor: "#02ccba",
     confirmButtonText: "Play again!"
@@ -82,7 +109,7 @@ $restart.bind("click", function() {
     allowEscapeKey: false,
     allowOutsideClick: false,
     title: "Are you sure?",
-    text: 'Your progress will be Lost!',
+    text: 'Your progress will be lost!',
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#02ccba",
