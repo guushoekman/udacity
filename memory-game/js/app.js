@@ -2,25 +2,24 @@ let seconds = 0, minutes = 0,
     t;
 
 function add() {
-    seconds++;
-    if (seconds >= 60) {
-        seconds = 0;
-        minutes++;
-        if (minutes >= 60) {
-            minutes = 0;
-            hours++;
-        }
-    }
+  seconds++;
+  if (seconds >= 60) {
+      seconds = 0;
+      minutes++;
+      if (minutes >= 60) {
+          minutes = 0;
+          hours++;
+      }
+  }
 
-    $(".time").text((minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds));
+  $(".time").text((minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds));
 
-    timer();
+  timer();
 }
+
 function timer() {
-    t = setTimeout(add, 1000);
+  t = setTimeout(add, 1000);
 }
-
-timer();
 
 let symbols = ["bicycle", "bicycle", "leaf", "leaf", "cube", "cube", "anchor", "anchor", "paper-plane-o", "paper-plane-o", "bolt", "bolt", "bomb", "bomb", "diamond", "diamond"],
     opened = [],
@@ -71,15 +70,12 @@ function initGame() {
 // Set Rating and final Score
 function setRating(moves) {
   let rating = 3;
-  if (moves > rank3stars && moves < rank2stars) {
+  if (moves > rank3stars && moves <= rank2stars) {
     $ratingStars.eq(2).removeClass("fa-star").addClass("fa-star-o");
     rating = 2;
-  } else if (moves > rank2stars && moves < rank1stars) {
+  } else if (moves > rank2stars) {
     $ratingStars.eq(1).removeClass("fa-star").addClass("fa-star-o");
     rating = 1;
-  } else if (moves > rank1stars) {
-    $ratingStars.eq(0).removeClass("fa-star").addClass("fa-star-o");
-    rating = 0;
   }
   return { score: rating };
 };
@@ -97,6 +93,7 @@ function endGame(moves, score) {
     confirmButtonText: "Play again!"
   }).then(function(isConfirm) {
     if (isConfirm) {
+      clearTimeout(t);
       initGame();
     }
   })
@@ -117,6 +114,7 @@ $restart.bind("click", function() {
     confirmButtonText: "Yes, Restart Game!"
   }).then(function(isConfirm) {
     if (isConfirm) {
+      clearTimeout(t);
       initGame();
     }
   })
@@ -127,7 +125,13 @@ let addCardListener = function() {
   // Card flip
   $deck.find(".card:not('.match, .open')").bind("click" , function() {
 
-    if($(".show").length > 1) { return true; }
+    if (seconds < 1 ) {
+      timer();
+    }
+
+    if ($(".show").length > 1) {
+      return true;
+    }
 
     let $this = $(this),
         card = $this.html();
