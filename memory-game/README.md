@@ -8,7 +8,7 @@ This project was made as part of the Udacity front-end nanodegree.
 
 A simple memory game. The cards are arranged randomly on the grid with the symbol face down. The gameplay rules are very simple: flip over two hidden cards at a time to locate the ones that match.
 
-## Resources
+## Dependencies
 
 - [JQuery](http://jquery.com/)
 - [SweetAlert](https://sweetalert.js.org)
