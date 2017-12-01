@@ -36,6 +36,7 @@ h1 {
 .deck {
   width: 660px;
   min-height: 680px;
+  max-width: 100%;
   background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
   padding: 32px;
   border-radius: 10px;
@@ -61,6 +62,16 @@ h1 {
   box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
+@media (max-width: 600px) {
+  .deck {
+    padding: 8px;
+  }
+  .deck .card {
+    min-width: 20%;
+    max-width: 24%;
+  }
+}
+
 .deck .card.open {
   transform: rotateY(0);
   background: #02b3e4;
@@ -80,6 +91,7 @@ h1 {
 .score-panel {
   text-align: left;
   width: 545px;
+  max-width: 100%;
   margin-bottom: 10px;
 }
 
