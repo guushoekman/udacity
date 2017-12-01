@@ -1,39 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
-    <meta charset="UTF-8">
-    <title>Udacity Memory Game</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/sweetalert2/3.0.3/sweetalert2.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
+    <meta charset="utf-8">
+    <title>Memory Game</title>
+    <meta name="description" content="">
+    <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="css/app.css">
   </head>
 
   <body>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+    <div class="container" id="game-deck">
+      <h1>Memory Game</h1>
 
-    <h1>Memory Game</h1>
-    <div id="score-panel">
-      <ul class="stars">
-        <li><i class="fa fa-star"></i></li>
-        <li><i class="fa fa-star"></i></li>
-        <li><i class="fa fa-star"></i></li>
-      </ul>
-      <span class="moves">0</span> moves
-
-      <span class="stopwatch center-block"><i class="fa fa-clock-o" aria-hidden="true"></i> <span class="time">00:00</span></span>
-
-      <div class="restart">
-        <i class="fa fa-repeat"></i> Restart
-      </div>
-
+      <section class="score-panel">
+        <ul class="stars" id="stars"></ul>
+        <span id="moves"></span>
+        <div class="text-right">
+          <span class="timer" id="timer">00:00:00</span>
+          <div class="restart">
+            <i class="fa fa-repeat" id="reset-button"></i>
+          </div>
+        </div>
+      </section>
+      <ul class="deck" id="deck"></ul>
     </div>
 
-    <ul class="deck"></ul>
+    <div class="container" id="sucess-result"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- fancy alerts, from https://sweetalert.js.org -->
-    <script src="https://cdn.jsdelivr.net/sweetalert2/3.0.3/sweetalert2.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/easytimer.min.js"></script>
     <script src="js/app.js"></script>
   </body>
 

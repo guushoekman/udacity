@@ -1,178 +1,196 @@
-let seconds = 0, minutes = 0,
-    t;
+/*
+ * Create a list that holds all of your cards
+ */
+var cardLists = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb"];
+// to store number of moves and matches found
+var moves = 0;
+var match_found = 0;
 
-function add() {
-  seconds++;
-  if (seconds >= 60) {
-      seconds = 0;
-      minutes++;
-      if (minutes >= 60) {
-          minutes = 0;
-          hours++;
-      }
+// check when first card is opened
+var game_started = false;
+
+// timer object
+var timer = new Timer();
+timer.addEventListener('secondsUpdated', function (e) {
+  $('#timer').html(timer.getTimeValues().toString());
+});
+
+// reference to reset button
+$('#reset-button').click(resetGame);
+// create and append card html
+function createCard(card) {
+  $('#deck').append(`<li class="card animated"><i class="fa ${card}"></i></li>`);
+}
+// generate random cards on the deck
+function generateCards() {
+  for (var i = 0; i < 2; i++) {
+    cardLists = shuffle(cardLists);
+    cardLists.forEach(createCard);
   }
-
-  $(".time").text((minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds));
-
-  timer();
 }
-
-function timer() {
-  t = setTimeout(add, 1000);
-}
-
-let symbols = ["bicycle", "bicycle", "leaf", "leaf", "cube", "cube", "anchor", "anchor", "paper-plane-o", "paper-plane-o", "bolt", "bolt", "bomb", "bomb", "diamond", "diamond"],
-    opened = [],
-    match = 0,
-    moves = 0,
-    $deck = $(".deck"),
-    $scorePanel = $("#score-panel"),
-    $moveNum = $(".moves"),
-    $ratingStars = $("i"),
-    $restart = $(".restart"),
-    delay = 800,
-    perfectGame = symbols.length / 2,
-    rank3stars = perfectGame + 4,
-    rank2stars = perfectGame + 8,
-    rank1stars = perfectGame + 12;
-
+// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-  let currentIndex = array.length, temporaryValue, randomIndex;
-
-  while (0 !== currentIndex) {
+  var currentIndex = array.length
+    , temporaryValue, randomIndex;
+  while (currentIndex !== 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
     temporaryValue = array[currentIndex];
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
   return array;
 }
+// Array to keep track of open cards
+openCards = [];
 
-// Initial Game
-function initGame() {
-  let cards = shuffle(symbols);
-  $deck.empty();
-  match = 0;
+// card functionality
+function toggleCard() {
+
+  // start the timer when first card is opened
+  if (game_started == false) {
+    game_started = true;
+    timer.start();
+  }
+
+  if (openCards.length === 0) {
+    $(this).toggleClass("show open").animateCss('flipInY');
+    openCards.push($(this));
+    disableCLick();
+  }
+  else if (openCards.length === 1) {
+    // increment moves
+    updateMoves();
+    $(this).toggleClass("show open").animateCss('flipInY');
+    openCards.push($(this));
+    setTimeout(matchOpenCards, 1100);
+  }
+}
+// Disable click of the open Cards
+function disableCLick() {
+  openCards.forEach(function (card) {
+    card.off('click');
+  });
+}
+// enable click on the open card
+function enableClick() {
+  openCards[0].click(toggleCard);
+}
+// check openCards if they match or not
+function matchOpenCards() {
+  if (openCards[0][0].firstChild.className == openCards[1][0].firstChild.className) {
+    console.log("matchCard");
+    openCards[0].addClass("match").animateCss('rubberBand');
+    openCards[1].addClass("match").animateCss('rubberBand');
+    disableCLick();
+    removeOpenCards();
+    setTimeout(checkWin, 1000);
+  }
+  else {
+    openCards[0].toggleClass("show open").animateCss('flipInY');
+    openCards[1].toggleClass("show open").animateCss('flipInY');
+    enableClick();
+    removeOpenCards();
+  }
+}
+// function to remove openCards
+function removeOpenCards() {
+  openCards = [];
+}
+// function to add animations
+$.fn.extend({
+  animateCss: function (animationName) {
+    var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+    this.addClass(animationName).one(animationEnd, function () {
+      $(this).removeClass(animationName);
+    });
+    return this;
+  }
+});
+// update moves
+function updateMoves() {
+  moves += 1;
+  $('#moves').html(`${moves} Moves`);
+  if (moves == 24) {
+    addBlankStar();
+  }
+  else if (moves == 15) {
+    addBlankStar();
+  }
+}
+// check whether the game is finished or not
+function checkWin() {
+  match_found += 1;
+  if (match_found == 8) {
+    showResults();
+  }
+}
+// add blank stars
+function addBlankStar() {
+  $('#stars').children()[0].remove();
+  $('#stars').append('<li><i class="fa fa-star-o"></i></li>');
+}
+// add initial stars
+function addStars() {
+  for (var i = 0; i < 3; i++) {
+    $('#stars').append('<li><i class="fa fa-star"></i></li>');
+  }
+}
+// reset the game
+function resetGame() {
   moves = 0;
-  $moveNum.text("0");
-  $ratingStars.removeClass("fa-star-o").addClass("fa-star");
-  for (let i = 0; i < cards.length; i++) {
-    $deck.append($("<li class='card'><i class='fa fa-" + cards[i] + "'></i></li>"))
-  }
-  addCardListener();
-  $(".time").text("00:00");
-  seconds = 0;
-  minutes = 0;;
-};
-
-// Set Rating and final Score
-function setRating(moves) {
-  let rating = 3;
-  if (moves > rank3stars && moves <= rank2stars) {
-    $ratingStars.eq(2).removeClass("fa-star").addClass("fa-star-o");
-    rating = 2;
-  } else if (moves > rank2stars) {
-    $ratingStars.eq(1).removeClass("fa-star").addClass("fa-star-o");
-    rating = 1;
-  }
-  return { score: rating };
-};
-
-// End Game
-function endGame(moves, score) {
-    swal({
-    // swal function usage: https://sweetalert.js.org/docs/
-    allowEscapeKey: false,
-    allowOutsideClick: false,
-    title: "Congratulations! You Won!",
-    text: "It took you " + moves + " moves and " + $(".time").text() + ". You scored " + score + " stars!",
-    type: "success",
-    confirmButtonColor: "#02ccba",
-    confirmButtonText: "Play again!"
-  }).then(function(isConfirm) {
-    if (isConfirm) {
-      clearTimeout(t);
-      initGame();
-    }
-  })
+  match_found = 0;
+  $('#deck').empty();
+  $('#stars').empty();
+  $('#game-deck')[0].style.display = "";
+  $('#sucess-result')[0].style.display = "none";
+  game_started=false;
+  timer.stop();
+  $('#timer').html("00:00:00");
+  playGame();
+}
+// Init function
+function playGame() {
+  generateCards();
+  $('.card').click(toggleCard);
+  $('#moves').html("0 Moves");
+  addStars(3);
+}
+// shows result on end game
+function showResults() {
+  $('#sucess-result').empty();
+  timer.pause();
+  var scoreBoard = `
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130">
+      <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+      <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " /> </svg>
+    <p class="success"> Congratulations! You Won! </p>
+    <p>
+      <span class="score-titles">Moves:</span>
+      <span class="score-values">${moves}</span>
+      <span class="score-titles">Time:</span>
+      <span class="score-values">${timer.getTimeValues().toString()}</span>
+    </p>
+    <div class="text-center margin-top-2">
+       <div class="star">
+        <i class="fa fa-star fa-3x"></i>
+       </div>
+       <div class="star">
+        <i class="fa ${ (moves > 23) ? "fa-star-o" : "fa-star"}  fa-3x"></i>
+       </div>
+      <div class="star">
+        <i class="fa ${ (moves > 14) ? "fa-star-o" : "fa-star"} fa-3x"></i>
+       </div>
+    </div>
+    <div class="text-center margin-top-2" id="restart">
+      <i class="fa fa-repeat fa-2x"></i>
+      </div>
+  `;
+  $('#game-deck')[0].style.display = "none";
+  $('#sucess-result')[0].style.display = "block";
+  $('#sucess-result').append($(scoreBoard));
+  $('#restart').click(resetGame);
 }
 
-// Restart Game
-$restart.bind("click", function() {
-  swal({
-    // swal function usage: https://sweetalert.js.org/docs/
-    allowEscapeKey: false,
-    allowOutsideClick: false,
-    title: "Are you sure?",
-    text: 'Your progress will be lost!',
-    type: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#02ccba",
-    cancelButtonColor: "#f95c3c",
-    confirmButtonText: "Yes, Restart Game!"
-  }).then(function(isConfirm) {
-    if (isConfirm) {
-      clearTimeout(t);
-      initGame();
-    }
-  })
-});
-
-let addCardListener = function() {
-
-  // Card flip
-  $deck.find(".card:not('.match, .open')").bind("click" , function() {
-
-    if (seconds < 1 ) {
-      timer();
-    }
-
-    if ($(".show").length > 1) {
-      return true;
-    }
-
-    let $this = $(this),
-        card = $this.html();
-    $this.addClass("open show");
-    opened.push(card);
-
-    // Compare with opened card
-    if (opened.length > 1) {
-      if (card === opened[0]) {
-        // animations from https://daneden.github.io/animate.css/
-        $deck.find(".open").addClass("match animated infinite rubberBand");
-        setTimeout(function() {
-          $deck.find(".match").removeClass("open show animated infinite rubberBand");
-        }, delay);
-        match++;
-      } else {
-        $deck.find(".open").addClass("notmatch animated infinite wobble");
-        setTimeout(function() {
-          $deck.find(".open").removeClass("animated infinite wobble");
-        }, delay / 1.5);
-        setTimeout(function() {
-          $deck.find(".open").removeClass("open show notmatch animated infinite wobble");
-        }, delay);
-      }
-      opened = [];
-      moves++;
-      setRating(moves);
-      $moveNum.html(moves);
-    }
-
-    // End Game if match all cards
-    if (perfectGame === match) {
-      setRating(moves);
-      let score = setRating(moves).score;
-      setTimeout(function() {
-        endGame(moves, score);
-      }, 500);
-    }
-
-  });
-
-};
-
-initGame();
+// start the game
+playGame();
