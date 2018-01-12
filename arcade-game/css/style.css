@@ -1,3 +1,19 @@
 body {
     text-align: center;
 }
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.win-notification {
+    transition: all 0.5s;
+    display: inline-block;
+}
+
+.win-notification:not(.hidden) {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(2) rotate(360deg);
+}

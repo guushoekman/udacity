@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Effective JavaScript: Frogger</title>
+    <title>Arcade Game</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+    <div>
+        <h1>Wining Time!</h1>
+        <div>Time on rock: <span class="timer-rock"></span></div>
+        <div>Time on grass: <span class="timer-grass"></span></div>
+        <div>Best time on rock (more is better): <span class="timer-best--rock"></span></div>
+        <div>Best time on grass (less is better): <span class="timer-best-grass"></span></div>
+        <h2 class="win-notification hidden">You win!</h2>
+    </div>
+    <script src="js/game-entity.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/enemy.js"></script>
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>
 </body>
+
 </html>
