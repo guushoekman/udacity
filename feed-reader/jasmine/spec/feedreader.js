@@ -68,7 +68,7 @@ $(function() {
 
     it('hidden by default', function() {
       expect(body.hasClass('menu-hidden')).toEqual(true);
-    })
+    });
 
     /* TODO: Write a test that ensures the menu changes
     * visibility when the menu icon is clicked. This test
