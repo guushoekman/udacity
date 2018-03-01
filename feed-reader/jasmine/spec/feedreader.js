@@ -102,7 +102,7 @@ $(function() {
      * the use of Jasmine's beforeEach and asynchronous done() function.
      */
 
-    it('should contain at least one single .entry element', function(done) {
+    it('should contain at least one .entry element', function(done) {
       var feedlist = $('.feed .entry')[0];
       expect(feedlist).toBeGreaterThan('');
       done();
