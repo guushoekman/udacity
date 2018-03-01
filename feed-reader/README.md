@@ -4,8 +4,8 @@ Testing a feed reader's javascript using Jasmine.
 
 ## Run tests
 
-- Clone the repository.
-- Open up index.html file.
+- Clone the repository
+- Open `index.html` file
 
 ## List of tests
 
@@ -19,7 +19,7 @@ Testing a feed reader's javascript using Jasmine.
   - shows up when clicked, closes when clicked again
 
 - Initial Entries
-  - When loadFeed function is called and completes, there is at least one .entry element
+  - When loadFeed function is called and completes, there is at least one `.entry` element
 
 - New Feed Selection
   - changes content when new feed is loaded
