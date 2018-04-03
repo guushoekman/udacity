@@ -103,8 +103,8 @@ $(function() {
      */
 
     it('should contain at least one .entry element', function(done) {
-      var feedlist = $('.feed .entry')[0];
-      expect(feedlist).toBeGreaterThan('');
+      var feedlist = $('.feed .entry').length;
+      expect(feedlist).toBeGreaterThan(0);
       done();
     });
 
