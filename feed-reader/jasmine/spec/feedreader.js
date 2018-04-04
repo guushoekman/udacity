@@ -117,24 +117,20 @@ $(function() {
     var beforeContent,
         afterContent;
 
-    /* TODO: Write a test that ensures when a new feed is loaded
-     * by the loadFeed function that the content actually changes.
-     * Remember, loadFeed() is asynchronous.
-     */
-
     beforeEach(function(done) {
       loadFeed(0, function() {
         beforeContent = $('.feed').find('h2').text();
         done();
+        loadFeed(1, function(){
+          afterContent = $('.feed').find('h2').text();
+          done();
+        });
       });
     });
 
     it('change content when new feed is loaded', function(done) {
-      loadFeed(1, function() {
-        afterContent = $('.feed').find('h2').text();
-        expect(beforeContent).not.toEqual(afterContent);
-        done();
-      });
+      expect(beforeContent).not.toEqual(afterContent);
+      done();
     });
 
   });
