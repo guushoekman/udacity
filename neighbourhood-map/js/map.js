@@ -1,4 +1,4 @@
-var map = L.map('map').fitBounds([[-33.8955,18.3527],[-33.9923,18.5188]]);
+var map = L.map('map').fitBounds([[-33.9157,18.4044],[-33.9421,18.4333]]);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>'
@@ -13,6 +13,38 @@ var markers = [
     id: "nav0",
     boolTest: true
   },
+  {
+    title: "District Six Museum",
+    lat: -33.927723,
+    lng: 18.4236726,
+    url: "https://en.wikipedia.org/wiki/District_Six_Museum",
+    id: "nav1",
+    boolTest: true
+  },
+  {
+    title: "Slave Lodge",
+    lat: -33.92506,
+    lng: 18.420393,
+    url: "https://en.wikipedia.org/wiki/Slave_Lodge,_Cape_Town",
+    id: "nav2",
+    boolTest: true
+  },
+  {
+    title: "Houses of Parliament",
+    lat: -33.92658,
+    lng: 18.41886,
+    url: "https://en.wikipedia.org/wiki/Houses_of_Parliament,_Cape_Town",
+    id: "nav3",
+    boolTest: true
+  },
+  {
+    title: "Iziko South African National Gallery",
+    lat: -33.928980,
+    lng: 18.417180,
+    url: "https://en.wikipedia.org/wiki/Iziko_South_African_National_Gallery",
+    id: "nav4",
+    boolTest: true
+  }
 ];
 
 $(markers).each(function() {
