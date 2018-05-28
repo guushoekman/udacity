@@ -1,4 +1,4 @@
-var map = L.map('map').fitBounds([[-33.9157,18.4044],[-33.9421,18.4333]]);
+var map = L.map('map').fitBounds([[-33.9245,18.4169],[-33.92955,18.42832]]);
 
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>'
@@ -48,6 +48,16 @@ var markers = [
 ];
 
 $(markers).each(function() {
+  $.ajax({
+    url: this.url,
+    data: queryData,
+    dataType: 'json',
+    type: 'POST',
+    headers: { 'Api-User-Agent': 'Example/1.0' },
+    success: function(data) {
+      console.log(data);
+    }
+  });
   L.marker([this.lat, this.lng]).addTo(map)
     .bindPopup("<a target='_blank' href='" + this.url + "'>" + this.title + "</a>")
     .on('popupopen', function() {
@@ -59,14 +69,3 @@ $(markers).each(function() {
       $(this._shadow).removeClass("move-marker")
     });
 });
-
-// $.ajax({
-//   url: remoteUrlWithOrigin,
-//   data: queryData,
-//   dataType: 'json',
-//   type: 'POST',
-//   headers: { 'Api-User-Agent': 'Example/1.0' },
-//   success: function(data) {
-//      // do something with data
-//   }
-// });
