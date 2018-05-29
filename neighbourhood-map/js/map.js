@@ -11,7 +11,8 @@ var markers = [
     lng: 18.42771,
     page: "Castle_of_Good_Hope",
     id: "nav0",
-    boolTest: true
+    boolTest: true,
+    description: "",
   },
   {
     title: "District Six Museum",
@@ -19,23 +20,26 @@ var markers = [
     lng: 18.4236726,
     page: "District_Six_Museum",
     id: "nav1",
-    boolTest: true
+    boolTest: true,
+    description: "",
   },
   {
-    title: "Slave Lodge, Cape Town",
+    title: "Slave Lodge",
     lat: -33.92506,
     lng: 18.420393,
     page: "Slave_Lodge,_Cape_Town",
     id: "nav2",
-    boolTest: true
+    boolTest: true,
+    description: "",
   },
   {
-    title: "Houses of Parliament, Cape Town",
+    title: "Houses of Parliament",
     lat: -33.92658,
     lng: 18.41886,
     page: "Houses_of_Parliament,_Cape_Town",
     id: "nav3",
-    boolTest: true
+    boolTest: true,
+    description: "",
   },
   {
     title: "Iziko South African National Gallery",
@@ -43,32 +47,39 @@ var markers = [
     lng: 18.417180,
     page: "Iziko_South_African_National_Gallery",
     id: "nav4",
-    boolTest: true
+    boolTest: true,
+    description: "",
   }
 ];
 
-$(markers).each(function() {
+$(markers).each(function(index) {
+  $.ajax({
+    type: "GET",
+    url: "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + this.page + "&limit=1&format=json" + "&origin=*",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function(data, textStatus, jqXHR) {
+      console.log(index);
+      markers[index].description = data[2][0];
+    },
+    error: function(errorMessage) {
+    }
+  });
+
   var url = "https://en.wikipedia.org/wiki/" + this.page
-  L.marker([this.lat, this.lng]).addTo(map)
-  .bindPopup("<a target='_blank' href='" + url + "'>" + this.title + "</a>")
+  var marker = L.marker([this.lat, this.lng]).bindPopup(this.title).addTo(map)
   .on('popupopen', function() {
+    L.popup().setContent("asdf")
     $(this._icon).addClass("move-marker")
     $(this._shadow).addClass("move-marker")
   })
-  .on('popupclose ', function() {
+  .on('popupclose', function() {
     $(this._icon).removeClass("move-marker")
     $(this._shadow).removeClass("move-marker")
   });
-  $.ajax({
-    type: "GET",
-    url: "https://en.wikipedia.org/w/api.php?action=query&titles=" + this.page + "&prop=pageimages&format=json&formatversion=2&origin=*",
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    success: function (data, textStatus, jqXHR) {
-      console.log(data.query.pages[0].thumbnail.source)
-    },
-    error: function (errorMessage) {
-    }
+  marker.on('mouseover', function(){
+    console.log(markers[index].description);
+    marker._popup.setContent(
+      "<h2>" + markers[index].title + "</h2><p>" + markers[index].description + "</p>");
   });
 });
-
