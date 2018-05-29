@@ -24,7 +24,11 @@
 <body>
   <div id="map"></div>
   <div class="knockout">
-    <h2>People</h2>
+    <h2>Locations</h2>
+    <!-- <input id="search" placeholder="Search by name" data-bind="textInput: userInput, event: {keyup: filter}"> -->
+    <div data-bind="foreach: markers">
+      <div class="item"><span data-bind="text: title"></span></div>
+    </div>
   </div>
 
   <script src="js/map.js"></script>

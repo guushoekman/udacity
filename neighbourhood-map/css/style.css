@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  font-family: sans-serif;
 }
 
 #map {
@@ -30,6 +31,27 @@ body {
 .knockout {
   z-index: 10000;
   position: absolute;
-  left: 0;
-  bottom: 0;
+  left: 5px;
+  bottom: 5px;
+  background-color: white;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 400px
+}
+
+.knockout .item {
+  padding-bottom: 6px;
+  padding-top: 6px;
+  border-bottom: 1px solid #ccc;
+}
+
+.knockout .item:last-of-type {
+  border-bottom-width: 0;
+}
+
+.knockout h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
