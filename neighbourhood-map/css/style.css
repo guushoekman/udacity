@@ -26,3 +26,10 @@ body {
   -moz-animation: bounce 1s infinite ease-in-out;
   animation: bounce 1s infinite ease-in-out;
 }
+
+.knockout {
+  z-index: 10000;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
