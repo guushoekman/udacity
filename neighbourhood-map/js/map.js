@@ -59,7 +59,6 @@ $(markers).each(function(index) {
     contentType: "application/json; charset=utf-8",
     dataType: "json",
     success: function(data, textStatus, jqXHR) {
-      console.log(index);
       markers[index].description = data[2][0];
     },
     error: function(errorMessage) {
@@ -78,8 +77,8 @@ $(markers).each(function(index) {
     $(this._shadow).removeClass("move-marker")
   });
   marker.on('mouseover', function(){
-    console.log(markers[index].description);
     marker._popup.setContent(
-      "<h2>" + markers[index].title + "</h2><p>" + markers[index].description + "</p>");
+      "<h2>" + markers[index].title + "</h2><p>" + markers[index].description + "</p><p><a target='_blank' href='https://en.wikipedia.org/wiki/" + markers[index].page + "'>Article on Wikipedia</a>"
+    );
   });
 });
