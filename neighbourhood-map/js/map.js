@@ -42,27 +42,22 @@ var markers = [
   }
 ];
 
+var visibleMarkers = []
+
 var Place = function (data) {
   this.title = ko.observable(data.title);
   this.lat = ko.observable(data.lat);
   this.lng = ko.observable(data.lng);
   this.page = ko.observable(data.page);
   this.marker = ko.observable();
-  this.description = ko.observable('');
+  this.description = ko.observable(data.description);
 };
 
-
 var viewModel = function(){
-  // Make this accessible
   var self = this;
 
-  // Create an array of all places
-  // Credit https://www.udacity.com/course/viewer#!/c-ud989-nd/l-3406489055/e-3464818693/m-3464818694
   this.placeList = ko.observableArray([]);
 
-  // Call the Place constructor
-  // Create Place objects for each item in locations & store them in the above array
-  // Credit https://www.udacity.com/course/viewer#!/c-ud989-nd/l-3406489055/e-3464818693/m-3464818694
   markers.forEach(function (placeItem) {
     self.placeList.push(new Place(placeItem));
   });
@@ -74,11 +69,7 @@ var viewModel = function(){
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       success: function(data, textStatus, jqXHR) {
-        // console.log(location.description());
         wikiDescription = data[2][0];
-        // console.log(asfd);
-      },
-      error: function(errorMessage) {
       }
     });
 
@@ -94,6 +85,7 @@ var viewModel = function(){
       $(this._shadow).removeClass("move-marker")
       map.fitBounds([[-33.9245,18.4169],[-33.92955,18.42832]])
     });
+    visibleMarkers.push(marker)
     marker.on('mouseover', function(){
       marker._popup.setContent(
         "<h2>" + location.title() + "</h2><p>" + wikiDescription + "</p><p><a target='_blank' href='https://en.wikipedia.org/wiki/" + location.page() + "'>Article on Wikipedia</a>"
@@ -101,32 +93,30 @@ var viewModel = function(){
     });
   });
 
-  self.visible = ko.observableArray();
-
-  // All markers are visible by default before any user input
-  self.placeList().forEach(function (place) {
-    self.visible.push(place);
-  });
-
   self.userInput = ko.observable('');
 
-  // self.filter = function () {
-  //   // Set all markers and places to not visible.
+  self.filter = function() {
+    // placeList().forEach(function(location) {
+    //   location
+    // }
+
+    // Set all markers and places to not visible.
+  //   markerGroup._layers[97].setOpacity(0)
   //   var searchInput = self.userInput().toLowerCase();
   //   self.visible.removeAll();
-  //   self.markers().forEach(function (place) {
-  //     console.log(this);
-  //     place.marker.setVisible(false);
-  //     // Compare the name of each place to user input
-  //     // If user input is included in the name, set the place and marker as visible
+  //   self.placeList().forEach(function (place) {
+  //     console.log(place);
+  //     place.marker.setOpacity(0);
+  //     Compare the name of each place to user input
+  //     If user input is included in the name, set the place and marker as visible
   //     if (place.name().toLowerCase().indexOf(searchInput) !== -1) {
   //       self.visible.push(place);
   //     }
   //   });
   //   self.visible().forEach(function (place) {
-  //     place.marker.setVisible(true);
+  //     place.marker.opacity(1);
   //   });
-  // };
+  };
 
 };
 
