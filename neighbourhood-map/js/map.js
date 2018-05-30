@@ -42,9 +42,7 @@ var markers = [
   }
 ];
 
-var visibleMarkers = []
-
-var Place = function (data) {
+var Place = function(data) {
   this.title = ko.observable(data.title);
   this.lat = ko.observable(data.lat);
   this.lng = ko.observable(data.lng);
@@ -53,8 +51,11 @@ var Place = function (data) {
   this.description = ko.observable(data.description);
 };
 
+var controlLayers = {};
+
 var viewModel = function(){
   var self = this;
+
 
   this.placeList = ko.observableArray([]);
 
@@ -65,7 +66,7 @@ var viewModel = function(){
   placeList().forEach(function(location) {
     $.ajax({
       type: "GET",
-      url: "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + location.page() + "&limit=1&format=json" + "&origin=*",
+      url: "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + location.page() + "&limit=1&format=json&origin=*",
       contentType: "application/json; charset=utf-8",
       dataType: "json",
       success: function(data, textStatus, jqXHR) {
@@ -74,7 +75,8 @@ var viewModel = function(){
     });
 
     var url = "https://en.wikipedia.org/wiki/" + location.page()
-    var marker = L.marker([location.lat(), location.lng()]).bindPopup(location.title()).addTo(map)
+    var lGroup = L.layerGroup().addTo(map);
+    var marker = L.marker([location.lat(), location.lng()]).bindPopup("<h2>" + location.title() + "</h2>").addTo(lGroup)
     .on('popupopen', function() {
       $(this._icon).addClass("move-marker")
       $(this._shadow).addClass("move-marker")
@@ -85,39 +87,17 @@ var viewModel = function(){
       $(this._shadow).removeClass("move-marker")
       map.fitBounds([[-33.9245,18.4169],[-33.92955,18.42832]])
     });
-    visibleMarkers.push(marker)
     marker.on('mouseover', function(){
       marker._popup.setContent(
         "<h2>" + location.title() + "</h2><p>" + wikiDescription + "</p><p><a target='_blank' href='https://en.wikipedia.org/wiki/" + location.page() + "'>Article on Wikipedia</a>"
       );
     });
+
+    controlLayers[location.title()] = lGroup;
+    marker.title = location.title();
+    marker.id = location.title();
   });
 
-  self.userInput = ko.observable('');
-
-  self.filter = function() {
-    // placeList().forEach(function(location) {
-    //   location
-    // }
-
-    // Set all markers and places to not visible.
-  //   markerGroup._layers[97].setOpacity(0)
-  //   var searchInput = self.userInput().toLowerCase();
-  //   self.visible.removeAll();
-  //   self.placeList().forEach(function (place) {
-  //     console.log(place);
-  //     place.marker.setOpacity(0);
-  //     Compare the name of each place to user input
-  //     If user input is included in the name, set the place and marker as visible
-  //     if (place.name().toLowerCase().indexOf(searchInput) !== -1) {
-  //       self.visible.push(place);
-  //     }
-  //   });
-  //   self.visible().forEach(function (place) {
-  //     place.marker.opacity(1);
-  //   });
-  };
-
+  showControl = L.control.layers(null, controlLayers, {collapsed: false}).addTo(map);
 };
-
 ko.applyBindings(viewModel);
