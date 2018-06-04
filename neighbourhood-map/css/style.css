@@ -41,6 +41,19 @@ body {
   max-width: 400px
 }
 
+#search {
+  width: calc(100% - 20px);
+}
+
+#list .single-location {
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+#list .single-location:hover {
+  color: #0366d6;
+}
+
 #leaflet-error {
   z-index: 10000;
   width: 100vw;
