@@ -1,3 +1,4 @@
+// the list of points of interest
 var markers = [
   {
     title: "Castle of Good Hope",
@@ -37,6 +38,7 @@ var markers = [
 ];
 
 var map;
+// this function draws the map on the page and is run after leaflet is loaded
 function initMap() {
   map = L.map('map').fitBounds([[-33.9245,18.4169],[-33.92955,18.42832]]);
 
@@ -47,6 +49,7 @@ function initMap() {
   ko.applyBindings(viewModel);
 }
 
+// this function creates the knockout model and is run after the map is drawn
 var viewModel = function(){
   var Place = function(data) {
     this.title = data.title;
@@ -70,6 +73,7 @@ var viewModel = function(){
 
     location.marker = marker;
 
+    // when a marker is clicked, a popup is shown; it has the title from the start, this ajax call adds extra information from wikipedia
     location.marker.on('popupopen', function() {
       $.ajax({
         type: "GET",
@@ -94,21 +98,19 @@ var viewModel = function(){
     });
   });
 
-  // Filter markers per user input
-
-  // Array containing only the markers based on search
+  // an array with the markers that match the search phrase
   self.visible = ko.observableArray();
 
-  // All markers are visible by default before any user input
+  // before anything is typed, all markers are visible
   self.placeList().forEach(function(location) {
     self.visible.push(location);
   });
 
-  // Track user input
+  // observe what is typed by the user
   self.userInput = ko.observable('');
 
   self.filter = function () {
-    // remove all markers from visible array
+    // remove all markers from self.visible array
     self.visible.removeAll();
     var searchInput = self.userInput().toLowerCase();
 
@@ -127,6 +129,7 @@ var viewModel = function(){
   };
 };
 
+// function run when leaflet fails to load
 function leafletError() {
   $("#leaflet-error").show();
 }
