@@ -55,8 +55,6 @@ var controlLayers = {};
 
 var viewModel = function(){
   var self = this;
-
-
   this.placeList = ko.observableArray([]);
 
   markers.forEach(function (placeItem) {
@@ -96,5 +94,39 @@ var viewModel = function(){
   });
 
   showControl = L.control.layers(null, controlLayers, {collapsed: false}).addTo(map);
+
+  // Filter markers per user input
+
+  // Array containing only the markers based on search
+  self.visible = ko.observableArray();
+
+  // All markers are visible by default before any user input
+  self.placeList().forEach(function(location) {
+    self.visible.push(location);
+  });
+
+  // Track user input
+  self.userInput = ko.observable('');
+
+  self.filter = function () {
+
+    // remove all markers from visible array
+    self.visible.removeAll();
+    var searchInput = self.userInput().toLowerCase();
+
+    self.placeList().forEach(function(location) {
+      // remove all layers from map
+      map.removeLayer(location.marker);
+      // compare user input with title of locations
+      // if location title contains user input, show marker
+      if (location.title().toLowerCase().indexOf(searchInput) !== -1) {
+        self.visible.push(location);
+      }
+    });
+    self.visible().forEach(function (location) {
+      map.addLayer(location.marker);
+    });
+  };
 };
+
 ko.applyBindings(viewModel);

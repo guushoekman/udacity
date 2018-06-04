@@ -28,7 +28,7 @@ body {
   animation: bounce 1s infinite ease-in-out;
 }
 
-.knockout {
+#filter {
   z-index: 10000;
   position: absolute;
   left: 5px;
@@ -39,19 +39,4 @@ body {
   border: 1px solid #ccc;
   width: 100%;
   max-width: 400px
-}
-
-.knockout .item {
-  padding-bottom: 6px;
-  padding-top: 6px;
-  border-bottom: 1px solid #ccc;
-}
-
-.knockout .item:last-of-type {
-  border-bottom-width: 0;
-}
-
-.knockout h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
 }
