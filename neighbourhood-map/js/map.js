@@ -64,20 +64,22 @@ var viewModel = function(){
   });
 
   placeList().forEach(function(location) {
-    $.ajax({
-      type: "GET",
-      url: "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + location.page() + "&limit=1&format=json&origin=*",
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      success: function(data, textStatus, jqXHR) {
-        wikiDescription = data[2][0];
-      }
-    });
-
     var url = "https://en.wikipedia.org/wiki/" + location.page()
     var lGroup = L.layerGroup().addTo(map);
     var marker = L.marker([location.lat(), location.lng()]).bindPopup("<h2>" + location.title() + "</h2>").addTo(lGroup)
-    .on('popupopen', function() {
+
+    location.marker = marker;
+
+    location.marker.on('popupopen', function() {
+      $.ajax({
+        type: "GET",
+        url: "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + location.page() + "&limit=1&format=json&origin=*",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+          location.marker.getPopup().setContent("<h2>" + location.title() + "</h2><p>" + data[2][0] + "</p>");
+        }
+      });
       $(this._icon).addClass("move-marker")
       $(this._shadow).addClass("move-marker")
       map.setView([location.lat(), location.lng()])
@@ -86,11 +88,6 @@ var viewModel = function(){
       $(this._icon).removeClass("move-marker")
       $(this._shadow).removeClass("move-marker")
       map.fitBounds([[-33.9245,18.4169],[-33.92955,18.42832]])
-    });
-    marker.on('mouseover', function(){
-      marker._popup.setContent(
-        "<h2>" + location.title() + "</h2><p>" + wikiDescription + "</p><p><a target='_blank' href='https://en.wikipedia.org/wiki/" + location.page() + "'>Article on Wikipedia</a>"
-      );
     });
 
     controlLayers[location.title()] = lGroup;
