@@ -31,7 +31,7 @@ body {
 #filter {
   z-index: 10000;
   position: absolute;
-  left: 5px;
+  right: 5px;
   bottom: 5px;
   background-color: white;
   padding: 8px;
@@ -39,4 +39,17 @@ body {
   border: 1px solid #ccc;
   width: 100%;
   max-width: 400px
+}
+
+#leaflet-error {
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ddd;
+  color: #333;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
 }
